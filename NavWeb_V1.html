@@ -262,8 +262,7 @@
 
                 if (timeLeft <= 0) {
                     clearInterval(btn.countdownInterval);
-                    btn.textContent = "איחר";
-                    btn.style.backgroundColor = '#f44336'; // Red color for late
+                    btn.outerHTML = `<span style="color: tomato; font-weight: bold;">איחר</span>`;
                 } else {
                     let hours = Math.floor(timeLeft / (1000 * 60 * 60));
                     let minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
@@ -278,7 +277,7 @@
             btn.removeEventListener("click", handleClick); // Remove the initial click listener
             btn.addEventListener("click", function secondClick() {
                 clearInterval(btn.countdownInterval);
-                btn.replaceWith(document.createTextNode("הגיע"));
+                btn.outerHTML = `<span style="color: aqua; font-weight: bold;">הגיע</span>`;
             });
         }
     });
