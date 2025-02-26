@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>אתר הזנקות - ניווטים חטיבת החילוץ</title>
+    <title>אתר הזנקות</title>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -12,7 +12,7 @@
             background-position: center;
             background-attachment: fixed;
             color: #e0e0e0; /* Light text color */
-            text-align: right;
+            text-align: center;
             padding: 20px;
         }
         h1 {
@@ -180,6 +180,17 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", loadTable);
+        window.addEventListener("beforeunload", function (e) {
+            // Custom message (only some browsers show this text)
+            const message = "Are you sure you want to leave? Unsaved changes might be lost.";
+    
+            // Standard approach to show a confirmation dialog
+            e.preventDefault(); 
+            e.returnValue = message; // For older browsers
+
+            return message; // For modern browsers
+        });
+
 
         function loadTable() {
             updateTableRows(parseInt(document.getElementById("farmCount").value));
@@ -225,63 +236,56 @@
             table.appendChild(newRow);
 
             newRow.querySelectorAll(".launch").forEach((btn, index) => {
-                btn.addEventListener("click", function() {
-                    // Disable the button to prevent multiple presses
-                    if (btn.disabled) return; // Prevent action if the button is already disabled
+    btn.addEventListener("click", function handleClick() {
+        // Check if the button already shows "הגיע" or "איחר"
+        if (btn.textContent === "הגיע" || btn.textContent === "איחר") return;
 
-                    let pace = parseFloat(document.getElementById("pace").value);
-                    let distance = parseFloat(newRow.querySelectorAll(".distance")[index].value);
+        let pace = parseFloat(document.getElementById("pace").value);
+        let distance = parseFloat(newRow.querySelectorAll(".distance")[index].value);
 
-                    // Validate distance input
-                    if (isNaN(distance) || distance <= 0) {
-                        alert("אנא הזן אורך ציר תקני.");
-                        return;  // Prevent calculation if distance is invalid
-                    }
+        if (isNaN(distance) || distance <= 0) {
+            alert("אנא הזן אורך ציר תקני.");
+            return;
+        }
 
-                    if (pace > 0) {
-                        let currentTime = new Date();
-                        let travelTime = distance / pace * 60 * 60 * 1000; // Convert hours to milliseconds
-                        let arrivalTime = new Date(currentTime.getTime() + travelTime);
+        if (pace > 0) {
+            let currentTime = new Date();
+            let travelTime = distance / pace * 60 * 60 * 1000;
+            let arrivalTime = new Date(currentTime.getTime() + travelTime);
 
-                        // Show the arrival time immediately
-                        newRow.querySelectorAll(".arrival")[index].textContent = arrivalTime.toLocaleTimeString("he-IL");
+            newRow.querySelectorAll(".arrival")[index].textContent = arrivalTime.toLocaleTimeString("he-IL");
 
-                        // Start countdown timer
-                        let countdownButton = newRow.querySelectorAll(".launch")[index];
-                        countdownButton.style.backgroundColor = '#ff9800'; // Change color to indicate countdown
-                        countdownButton.textContent = "זמן נשאר"; // Change button text to "Time Remaining"
+            btn.style.backgroundColor = '#ff9800';
+            btn.textContent = "זמן נשאר";
 
-                        let countdownInterval;
+            function updateCountdown() {
+                let now = new Date();
+                let timeLeft = arrivalTime - now;
 
-                        function updateCountdown() {
-                            let now = new Date();
-                            let timeLeft = arrivalTime - now; // Remaining time in milliseconds
+                if (timeLeft <= 0) {
+                    clearInterval(btn.countdownInterval);
+                    btn.textContent = "איחר";
+                    btn.style.backgroundColor = '#f44336'; // Red color for late
+                } else {
+                    let hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                    let minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                    btn.textContent = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+                }
+            }
 
-                            if (timeLeft <= 0) {
-                                countdownButton.textContent = "איחר"; // Arrival time reached or overdue
-                                countdownButton.style.backgroundColor = '#f44336'; // Red color for late
-                                clearInterval(countdownInterval);
-                            } else {
-                                let hours = Math.floor(timeLeft / (1000 * 60 * 60));
-                                let minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                                countdownButton.textContent = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`; // Display time in h:mm format
-                            }
-                        }
+            // Store the interval ID on the button element itself
+            btn.countdownInterval = setInterval(updateCountdown, 1000);
 
-                        // Update the countdown every second
-                        countdownInterval = setInterval(updateCountdown, 1000);
-
-                        // Change button text and color if clicked again during countdown
-                        countdownButton.addEventListener("click", function() {
-                            if (countdownButton.textContent === "זמן נשאר") {
-                                countdownButton.textContent = "הגיע"; // Change to "Arrived"
-                                countdownButton.style.backgroundColor = '#2196f3'; // Blue color
-                                clearInterval(countdownInterval); // Stop countdown
-                            }
-                        });
-                    }
-                });
+            // Change behavior for the second click
+            btn.removeEventListener("click", handleClick); // Remove the initial click listener
+            btn.addEventListener("click", function secondClick() {
+                clearInterval(btn.countdownInterval);
+                btn.replaceWith(document.createTextNode("הגיע"));
             });
+        }
+    });
+});
+
         }
 
         // Lock functionality
