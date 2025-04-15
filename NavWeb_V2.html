@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background-image: url('./wallpaper.png'); /* Replace with actual image URL */
+            background-image: url("./wallpaper.png"); /* Path to your background image */
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -49,14 +49,14 @@
             color: #e0e0e0; /* Light text in inputs */
         }
         button {
-            background-color: #388e3c;
+            background-color: #899735;
             color: white;
             cursor: pointer;
             font-size: 16px;
             transition: all 0.3s ease;
         }
         button:hover {
-            background-color: #2c6b2f;
+            background-color: #606b26;
             transform: scale(1.05);
         }
         table {
@@ -99,7 +99,7 @@
             border-bottom: 1px solid #555;
         }
         th {
-            background-color: #388e3c;
+            background-color: #899735;
             color: white;
         }
         tr:nth-child(odd) {
@@ -122,8 +122,8 @@
             transition: border-color 0.3s ease;
         }
         input[type="text"]:focus, input[type="number"]:focus, select:focus {
-            border-color: #81c784;
-            box-shadow: 0 0 5px rgba(129, 199, 132, 0.7);
+            border-color: #ffffff;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
         }
         button:active {
             transform: scale(0.98); /* Button shrinks on click */
@@ -135,11 +135,11 @@
             border-radius: 8px;
         }
         .lock-btn {
-            background-color: #f44336;
+            background-color: #899735;
             color: white;
         }
         .unlock-btn {
-            background-color: #388e3c;
+            background-color: #899735;
             color: white;
         }
         .dropdown {
@@ -149,7 +149,7 @@
         }
 
         .dropbtn {
-            background-color: #388e3c;
+            background-color: #899735;
             color: white;
             padding: 12px 20px;
             font-size: 18px;
@@ -160,7 +160,7 @@
         }
 
         .dropbtn:hover {
-            background-color: #2c6b2f;
+            background-color: #606b26;
         }
 
         .dropdown-content {
@@ -198,7 +198,7 @@
             position: fixed;
             bottom: 20px;
             left: 20px;
-            background-color: rgba(56, 142, 60, 0.9); /* Green background */
+            background-color: #606b26; 
             color: white;
             padding: 10px 20px;
             border-radius: 8px;
@@ -364,7 +364,7 @@
             let startNumberField = document.getElementById("startNumber");
             if (startNumberField.disabled) {
                 startNumberField.disabled = false; // Enable the input field
-                this.style.backgroundColor = '#388e3c'; // Reset button color
+                this.style.backgroundColor = '#899735'; // Reset button color
                 this.textContent = "נעל"; // Change button text to "Lock"
             } else {
                 startNumberField.disabled = true; // Disable the input field
@@ -377,7 +377,7 @@
             let farmCountField = document.getElementById("farmCount");
             if (farmCountField.disabled) {
                 farmCountField.disabled = false; // Enable the input field
-                this.style.backgroundColor = '#388e3c'; // Reset button color
+                this.style.backgroundColor = '#899735'; // Reset button color
                 this.textContent = "נעל"; // Change button text to "Lock"
             } else {
                 farmCountField.disabled = true; // Disable the input field
